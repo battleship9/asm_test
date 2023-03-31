@@ -139,9 +139,6 @@ extern XSetWMProtocols
 global _start
 _start:
 
-mov rax, 1
-int 80h
-
 ; -------------------------------------------------------------------
 ; connect to x server by calling:
 ; Display *XOpenDisplay(char *display_name)

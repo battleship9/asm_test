@@ -69,9 +69,13 @@ end_string:	db "============================", 10, 10, 0
 _start:
 	; Print start string
 	mov	rdi, start_string
-	sub	rsp, 8
+;	sub	rsp, 8
 	call	printf
-	add	rsp, 8
+;	add	rsp, 8
+
+mov rax, 1
+mov rbx, 0
+int 80h
 
 	; Display* XOpenDisplay(NULL)
 	mov	rdi, 0

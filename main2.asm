@@ -133,13 +133,11 @@ _start:
 ; DISPLAY variable. Use BASH command "echo $DISPLAY" to view
 ; the current contents of the DISPLAY environment variable.
 ; -------------------------------------------------------------------
-    sub    rsp, 4                        ;reserve 4 bytes
+;    sub    rsp, 4                        ;reserve 4 bytes
     mov    dword [rsp], 0                ;arg1: NULL
     call   XOpenDisplay
-    add    rsp, 4                        ;restore 4 bytes
+;    add    rsp, 4                        ;restore 4 bytes
     mov    [gui_t + xserver.pDisplay], rax
-
-jmp _exit
 
 ; -------------------------------------------------------------------
 ; get default screen by calling:
@@ -148,12 +146,12 @@ jmp _exit
 ; This function should be used to retrieve the screen number in
 ; applications that will use only a single screen.
 ; -------------------------------------------------------------------
-    sub    esp, 4                             ;reserve 4 bytes
-    mov    eax, [gui_t+xserver.pDisplay]
-    mov    [esp], eax                         ;arg1: pDisplay
+;    sub    rsp, 4                             ;reserve 4 bytes
+    mov    rax, [gui_t + xserver.pDisplay]
+    mov    [rsp], rax                         ;arg1: pDisplay
     call   XDefaultScreen
-    add    esp, 4                             ;restore 4 bytes
-    mov    [gui_t+xserver.screen_number], eax
+;    add    rsp, 4                             ;restore 4 bytes
+    mov    [gui_t + xserver.screen_number], rax
 
 ; -------------------------------------------------------------------
 ; get pointer to the default screen:
@@ -161,12 +159,12 @@ jmp _exit
 ;
 ; This function returns a pointer to the default screen.
 ; -------------------------------------------------------------------
-    sub    esp, 4                        ;reserve 4 bytes
-    mov    eax, [gui_t+xserver.pDisplay]
-    mov    [esp], eax                    ;arg1: pDisplay
+;    sub    rsp, 4                        ;reserve 4 bytes
+    mov    rax, [gui_t + xserver.pDisplay]
+    mov    [rsp], rax                    ;arg1: pDisplay
     call   XDefaultScreenOfDisplay
-    add    esp, 4                        ;restore 4 bytes
-    mov    [gui_t+xserver.pScreen], eax
+;    add    rsp, 4                        ;restore 4 bytes
+    mov    [gui_t + xserver.pScreen], rax
 
 ; -------------------------------------------------------------------
 ; set atom delete window message:
@@ -177,20 +175,20 @@ jmp _exit
 ; This function returns the atom identifier associated with the
 ; specified atom_name string.
 ; -------------------------------------------------------------------
-    sub    esp, 12        ;reserve 12 bytes
-    mov    eax, [gui_t+xserver.pDisplay]
-    mov    ebx, gui_t
-    add    ebx, xserver.size
-    add    ebx, xswa.size
-    add    ebx, xwin.atom_name
-    xor    ecx, ecx
-    mov    [esp    ], eax ;arg1: pDisplay
-    mov    [esp + 4], ebx ;arg2: atom_name
-    mov    [esp + 8], ecx ;arg3: FALSE
+;    sub    rsp, 12        ;reserve 12 bytes
+    mov    rax, [gui_t+xserver.pDisplay]
+    mov    rbx, gui_t
+    add    rbx, xserver.size
+    add    rbx, xswa.size
+    add    rbx, xwin.atom_name
+    xor    rcx, rcx
+    mov    [rsp], rax ;arg1: pDisplay
+    mov    [rsp + 4], rbx ;arg2: atom_name
+    mov    [rsp + 8], rcx ;arg3: FALSE
     call   XInternAtom
-    add    esp, 12        ;restore 12 bytes
-    mov    [gui_t+xserver.size+xswa.size+xwin.wm_delete_msg], eax
-
+;    add    rsp, 12        ;restore 12 bytes
+    mov    [gui_t + xserver.size + xswa.size + xwin.wm_delete_msg], rax
+jmp _exit
 ; -------------------------------------------------------------------
 ; get rootwindow by calling:
 ; Window XRootWindow(Display *display, int screen_number)

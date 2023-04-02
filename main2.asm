@@ -1,25 +1,11 @@
-;+------------------------------------------------------------------+
-;|          Create simple window using ASMx86 with Xlib             |
-;|         ---------------------------------------------            |
-;|                                                                  |
-;|    This source code demonstrates on how to create GUI using      |
-;|    ASMx86 NASM Language with Xlib.                               |
-;|                                                                  |
-;|                         HOW TO COMPILE                           |
-;|                        ----------------                          |
-;|                                                                  |
-;|    Open Terminal and use these commands:                         |
-;|    $ nasm src/main.asm -o build/main.o -felf32 -w+all -gstabs    |
-;|    $ ld build/main.o -o bin/exe \                                |
-;|      -melf_i386 \                                                |
-;|      -dynamic-linker /lib/ld-linux.so.2 \                        |
-;|      /lib/libX11.so.6                                            |
-;|                                                                  |
-;|    @author: Nik Mohamad Aizuddin b. Nik Azmi                     |
-;|    @email : nickaizuddin93@gmail.com                             |
-;+------------------------------------------------------------------+
+; nasm -felf64 main2.asm -o main.o
+; ld main.o -o main -lX11 -dynamic-linker /lib64/ld-linux-x86-64.so.2
 
-; ---- structure definition -----------------------------------------
+
+[bits 64]
+global _start
+
+
 struc xserver
     .pDisplay:              resd 1
     .pScreen:               resd 1
@@ -65,10 +51,10 @@ endstruc
 
 struc xevent
     .data:                  resd 24
-    .size: 
+    .size:
 endstruc
 
-; ---- section read/write data --------------------------------------
+
 section .data
 
 gui_t:
@@ -136,7 +122,6 @@ extern XCloseDisplay
 extern XInternAtom
 extern XSetWMProtocols
 
-global _start
 _start:
 
 ; -------------------------------------------------------------------
@@ -148,11 +133,13 @@ _start:
 ; DISPLAY variable. Use BASH command "echo $DISPLAY" to view
 ; the current contents of the DISPLAY environment variable.
 ; -------------------------------------------------------------------
-    sub    esp, 4                        ;reserve 4 bytes
-    mov    dword [esp], 0                ;arg1: NULL
+    sub    rsp, 4                        ;reserve 4 bytes
+    mov    dword [rsp], 0                ;arg1: NULL
     call   XOpenDisplay
-    add    esp, 4                        ;restore 4 bytes
-    mov    [gui_t+xserver.pDisplay], eax
+    add    rsp, 4                        ;restore 4 bytes
+    mov    [gui_t + xserver.pDisplay], rax
+
+jmp _exit
 
 ; -------------------------------------------------------------------
 ; get default screen by calling:
@@ -406,9 +393,11 @@ exit:
     call   XCloseDisplay
     add    esp, 4                        ;restore 4 bytes
 
-; -------------------------------------------------------------------
-; system call exit
-; -------------------------------------------------------------------
-    mov    eax, 0x1
-    mov    ebx, 0x0
-    int    0x80
+	mov rax, 1
+	mov rbx, 0
+	int 80h
+
+_exit:
+mov rax, 1
+mov rbx, 0
+int 80h

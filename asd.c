@@ -11,10 +11,10 @@ int main(void) {
    int s;
 
    d = XOpenDisplay(NULL);
-   if (d == NULL) {
-      fprintf(stderr, "Cannot open display\n");
-      exit(1);
-   }
+   // if (d == NULL) {
+   //    fprintf(stderr, "Cannot open display\n");
+   //    exit(1);
+   // }
 
    s = DefaultScreen(d);
    w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, 100, 100, 1,

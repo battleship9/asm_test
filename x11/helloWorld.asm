@@ -34,8 +34,7 @@ section .text
 	extern XFillRectangle
 	extern XCloseDisplay
 
-	;in case of x86_64 params are passed in RDI,
-	;RSI, RDX, RCX, R8, R9, stack (in reverse order), in that order
+	;in case of x86_64 params are passed in RDI, RSI, RDX, RCX, R8, R9, stack (in reverse order)
 
 _start:
 	; d = XOpenDisplay(NULL);

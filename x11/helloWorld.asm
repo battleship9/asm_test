@@ -66,8 +66,7 @@ _start:
 	call XWhitePixel
 	mov [whitePixel], rax
 
-	; w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, 100, 100, 1,
-	;						BlackPixel(d, s), WhitePixel(d, s));
+	; w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, 100, 100, 1, BlackPixel(d, s), WhitePixel(d, s));
 	mov rdi, [d]
 	mov rsi, [rootwindow]
 	mov rdx, 10

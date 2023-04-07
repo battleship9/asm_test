@@ -11,7 +11,7 @@ msgLen: equ $ - msg
 section .bss
 d: resq 1
 w: resq 1
-e: resq 1
+e: resb 192
 s: resq 1
 rootwindow: resq 1
 blackPixel: resd 1
@@ -37,6 +37,7 @@ section .text
 	;in case of x86_64 params are passed in RDI, RSI, RDX, RCX, R8, R9, stack (in reverse order)
 
 _start:
+
 	; d = XOpenDisplay(NULL);
 	mov rdi, 0
 	call XOpenDisplay
@@ -80,6 +81,8 @@ _start:
 	push rax
 	call XCreateSimpleWindow
 	mov [w], rax
+
+	pop rax
 
 	; XSelectInput(d, w, ExposureMask | KeyPressMask);
 	mov rdi, [d]
